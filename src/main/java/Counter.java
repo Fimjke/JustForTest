@@ -163,7 +163,16 @@ public class Counter {
         System.out.println("Введите выражение в троично-симметричной системе счисления");
         Scanner scanner = new Scanner(System.in);
         String expression = scanner.next();
-        System.out.println(expression);
+        parser(expression);
+        System.out.println(convertToTenSystemCount(expressionA) + " Число А");
+        System.out.println(convertToTenSystemCount(expressionB) + " Число Б");
+        System.out.println("Результат вычисления в десятичной системе счисления ---> " + actionForTest());
+        converterForAB();
+        String result = getResult();
+        System.out.println("Результат: " + result);
+        System.out.println("Проверка: переводим полученное число в десятичную систему счисления");
+        System.out.println(convertToTenSystemCount(result));
+
     }
 
 
