@@ -42,13 +42,6 @@ public class Counter {
     public void converterForAB (){
         conA = converterToMainSystem(expressionA);
         conB = converterToMainSystem(expressionB);
-        // заранее определим максимальный массив чисел (наибольшее по разрядности число)
-        // просто поменяем местами
-        if (conB.length > conA.length){
-            int[] tmp = conA;
-            conA = conB;
-            conB = tmp;
-        }
     }
 
     //метод для получения обратного числа, будем использоваить при вычитании если число положительное
@@ -68,54 +61,87 @@ public class Counter {
 
 
     //собственно, само сложение
-    public ArrayList<Integer> addition(){
-        int minIndex = conB.length -1;
-        int maxIndex = conA.length -1;
+    public ArrayList<Integer> addition() {
+        int maxIndex;
+        int minIndex;
+
+        if (conA.length > conB.length) {
+            maxIndex = conA.length - 1;
+            minIndex = conB.length - 1;
+        } else {
+            maxIndex = conB.length - 1;
+            minIndex = conA.length - 1;
+        }
 
         ArrayList<Integer> resultList = new ArrayList<Integer>();
         //сюда складываем превышенное значение на следующий разряд
         int tmp = 0;
         //смещение индексов (сложение столбиком), да-да лучше не придумала
         for (int i = maxIndex, j = minIndex; j >= 0; i--, j--) {
-            int res = conA[i] + conB[j] + tmp;
+            int res;
+            if (conA.length > conB.length) {
+                res = conA[i] + conB[j] + tmp;
+            } else {
+                res = conA[j] + conB[i] + tmp;
+            }
             // в случае +(+)+
             if (res == 2) {
                 resultList.add(-1);
                 tmp = 1;
                 res = 0; //обнуляем рес для следующего разряда
-            } else if (res == -2) {
+            } else if (res == -2) {  //в случае -(+)-
                 resultList.add(1);
                 tmp = -1;
                 res = 0;
-            } else if (res == 3) {
+            } else if (res == 3) { // в случае + (+) + (+) +
                 resultList.add(0);
                 tmp = 1;
                 res = 0;
-            } else if (res == -3) {
+            } else if (res == -3) { // в случае - (+) - (+) -
                 resultList.add(0);
                 tmp = -1;
                 res = 0;
             } else {
-                resultList.add(res);
+                resultList.add(res); //во всех остальных
                 res = 0;
                 tmp = 0;
             }
         }
         // если у нас одно число больше другого числа по разрядности
+        //  очень не красивое дублирование кода, надо убрать!
+
         if (maxIndex != minIndex) {
-            for (int i = maxIndex - minIndex -1; i >= 0; i--) {
-                int res = conA[i] + tmp;
-                if (res == 2) {
-                    resultList.add(-1);
-                    tmp = 1;
-                    res = 0;
-                } else if (res == -2) {
-                    resultList.add(1);
-                    tmp = -1;
-                    res = 0;
-                } else {
-                    resultList.add(res);
-                    tmp = 0;
+            if (conA.length > conB.length) {
+                for (int i = maxIndex - minIndex - 1; i >= 0; i--) {
+                    int res = conA[i] + tmp;
+                    if (res == 2) {
+                        resultList.add(-1);
+                        tmp = 1;
+                        res = 0;
+                    } else if (res == -2) {
+                        resultList.add(1);
+                        tmp = -1;
+                        res = 0;
+                    } else {
+                        resultList.add(res);
+                        tmp = 0;
+                    }
+                }
+            } else {
+                for (int i = maxIndex - minIndex - 1; i >= 0; i--) {
+                    int res = conB[i] + tmp;
+                    if (res == 2) {
+                        resultList.add(-1);
+                        tmp = 1;
+                        res = 0;
+                    } else if (res == -2) {
+                        resultList.add(1);
+                        tmp = -1;
+                        res = 0;
+                    } else {
+                        resultList.add(res);
+                        tmp = 0;
+                    }
                 }
             }
         }
@@ -133,7 +159,11 @@ public class Counter {
         if (conB[0] == 1){
         conB = reverse(conB);
         } else if (conA[0]  == -1 & conB[0] == -1){
-            conA = reverse(conA);
+            if(convertToTenSystemCount(expressionA) > convertToTenSystemCount(expressionB)){
+                conB = reverse(conB);
+            } else {
+                conA = reverse(conA);
+            }
         }
         return addition();
     }
@@ -162,11 +192,15 @@ public class Counter {
         Scanner scanner = new Scanner(System.in);
         String expression = scanner.next();
         parser(expression);
+        converterForAB();
         System.out.println(convertToTenSystemCount(expressionA) + " Число А");
         System.out.println(convertToTenSystemCount(expressionB) + " Число Б");
         System.out.println("Результат вычисления в десятичной системе счисления ---> " + actionForTest());
-        converterForAB();
+
         String result = getResult();
+        while (result.charAt(0) == '0'){
+            result = result.substring(1);
+        }
         System.out.println("Результат: " + result);
         System.out.println("Проверка: переводим полученное число в десятичную систему счисления");
         System.out.println(convertToTenSystemCount(result));
