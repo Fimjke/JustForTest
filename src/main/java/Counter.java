@@ -12,10 +12,6 @@ public class Counter {
     public int[] conB;
 
 
-
-
-
-
     public void parser (String str){
         int f1EndIndex = str.indexOf("(");
         expressionA = str.substring(0, f1EndIndex);
@@ -25,7 +21,7 @@ public class Counter {
     }
 
 
-    /** приводим число к виду: [1 0 -1 0 1]
+    /* приводим число к виду: [1 0 -1 0 1]
      для удобства вычислений */
 
     public int[] converterToMainSystem (String str){
@@ -136,6 +132,8 @@ public class Counter {
     public ArrayList<Integer> subtraction (){
         if (conB[0] == 1){
         conB = reverse(conB);
+        } else if (conA[0]  == -1 & conB[0] == -1){
+            conA = reverse(conA);
         }
         return addition();
     }
@@ -175,15 +173,6 @@ public class Counter {
 
     }
 
-
-
-
-
-
-
-
-
-
     //для проверки
     public int convertToTenSystemCount (String str){
         char[] array = str.toCharArray();
@@ -200,10 +189,10 @@ public class Counter {
     //для проверки
     public int actionForTest(){
         if (act == '-'){
-            if (expressionB.charAt(0) == '-' | expressionA.charAt(0) =='-'){
+            if (expressionB.charAt(0) == '-' & expressionA.charAt(0) =='-') {
+                return convertToTenSystemCount(expressionA) + Math.abs(convertToTenSystemCount(expressionB));
+            } else if (expressionB.charAt(0) == '-' | expressionA.charAt(0) =='-'){
                 return convertToTenSystemCount(expressionA) + convertToTenSystemCount(expressionB);
-            } else {
-                return convertToTenSystemCount(expressionA) - convertToTenSystemCount(expressionB);
             }
         }
         return convertToTenSystemCount(expressionA) + convertToTenSystemCount(expressionB);
