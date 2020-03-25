@@ -195,7 +195,11 @@ public class Counter {
         converterForAB();
         System.out.println(convertToTenSystemCount(expressionA) + " Число А");
         System.out.println(convertToTenSystemCount(expressionB) + " Число Б");
-        System.out.println("Результат вычисления в десятичной системе счисления ---> " + actionForTest());
+        if (act == '+') {
+            System.out.println("Результат вычисления в десятичной системе счисления ---> " + testPlus());
+        } else {
+            System.out.println("Результат вычисления в десятичной системе счисления ---> " + testMinus());
+        }
 
         String result = getResult();
         while (result.charAt(0) == '0'){
@@ -221,15 +225,15 @@ public class Counter {
     }
 
     //для проверки
-    public int actionForTest(){
-        if (act == '-'){
-            if (expressionB.charAt(0) == '-' & expressionA.charAt(0) =='-') {
-                return convertToTenSystemCount(expressionA) + Math.abs(convertToTenSystemCount(expressionB));
-            } else if (expressionB.charAt(0) == '-' | expressionA.charAt(0) =='-'){
-                return convertToTenSystemCount(expressionA) + convertToTenSystemCount(expressionB);
-            }
-        }
-        return convertToTenSystemCount(expressionA) + convertToTenSystemCount(expressionB);
+    public int testMinus(){
+        int a = convertToTenSystemCount(expressionA);
+        int b = convertToTenSystemCount(expressionB);
+        return a - b;
+    }
+    public int testPlus(){
+        int a = convertToTenSystemCount(expressionA);
+        int b = convertToTenSystemCount(expressionB);
+        return a + b;
     }
 
 
