@@ -164,6 +164,8 @@ public class Counter {
             } else {
                 conA = reverse(conA);
             }
+        } else if (conB[0] == -1){
+            conB = reverse(conB);
         }
         return addition();
     }
